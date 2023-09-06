@@ -28,9 +28,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 //        конфигурируем сам спринг Security
 //        конфигурируем авторизацию
-        http.formLogin().loginPage("/auth/login")
+        // отключаем защиту от межсайтовой подделки запросов
+        // отправляем на страницу регистрации всех
+        // указываем доступные страницы до момента аутентификации
+        http.csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/auth/login","/error","/auth/registration").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin().loginPage("/auth/login")
                 .loginProcessingUrl("/process_login")
-                .defaultSuccessUrl("/hello", true)
+                .defaultSuccessUrl("/hello/say_hello", true)
                 .failureUrl("/auth/login?error");
     }
 
