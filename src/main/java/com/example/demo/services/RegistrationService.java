@@ -22,6 +22,7 @@ public class RegistrationService {
     public void register(Person person) {
         String encryptionPass = bCryptPasswordEncoder.encode(person.getPassword());
         person.setPassword(encryptionPass);
+        person.setRole("ROLE_USER");
         peopleRepository.save(person);
     }
 }

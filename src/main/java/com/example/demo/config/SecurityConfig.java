@@ -33,10 +33,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // отправляем на страницу регистрации всех
         // указываем доступные страницы до момента аутентификации
         http.authorizeRequests()
+                .antMatchers("/hello/admin").hasRole("ADMIN")
                 .antMatchers("/auth/login", "/error", "/auth/registration")
                 .permitAll()
-                .anyRequest()
-                .authenticated()
+                .anyRequest().hasAnyRole("USER", "ADMIN")
                 .and()
                 .formLogin().loginPage("/auth/login")
                 .loginProcessingUrl("/process_login")
