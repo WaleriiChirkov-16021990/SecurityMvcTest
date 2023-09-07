@@ -32,8 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // отключаем защиту от межсайтовой подделки запросов
         // отправляем на страницу регистрации всех
         // указываем доступные страницы до момента аутентификации
-        http.csrf().disable()
-                .authorizeRequests()
+        http.authorizeRequests()
                 .antMatchers("/auth/login", "/error", "/auth/registration")
                 .permitAll()
                 .anyRequest()
