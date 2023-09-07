@@ -9,13 +9,14 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity
 @Getter
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-//    private final AuthProviderImpl authProvider; custom authentication
+    //    private final AuthProviderImpl authProvider; custom authentication
     private final PersonDetailsService personDetailsService;
 
     @Autowired
@@ -33,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // указываем доступные страницы до момента аутентификации
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/auth/login","/error","/auth/registration")
+                .antMatchers("/auth/login", "/error", "/auth/registration")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -49,12 +50,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // Настраиваем аутентификацию
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(personDetailsService);
+        auth.userDetailsService(personDetailsService)
+                .passwordEncoder(getPasswordEncoder());
     }
 
-    @Bean // no passwordEncode
-    public PasswordEncoder getPasswordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+    @Bean // passwordEncode
+    public BCryptPasswordEncoder getPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }
