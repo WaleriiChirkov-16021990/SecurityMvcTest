@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Getter
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //    private final AuthProviderImpl authProvider; custom authentication
@@ -33,7 +35,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // отправляем на страницу регистрации всех
         // указываем доступные страницы до момента аутентификации
         http.authorizeRequests()
-                .antMatchers("/hello/admin").hasRole("ADMIN")
                 .antMatchers("/auth/login", "/error", "/auth/registration")
                 .permitAll()
                 .anyRequest().hasAnyRole("USER", "ADMIN")
