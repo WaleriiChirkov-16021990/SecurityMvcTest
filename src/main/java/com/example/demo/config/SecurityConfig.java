@@ -33,13 +33,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // указываем доступные страницы до момента аутентификации
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/auth/login","/error","/auth/registration").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/auth/login","/error","/auth/registration")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
                 .and()
                 .formLogin().loginPage("/auth/login")
                 .loginProcessingUrl("/process_login")
                 .defaultSuccessUrl("/hello/say_hello", true)
-                .failureUrl("/auth/login?error");
+                .failureUrl("/auth/login?error")
+                .and()
+                .logout().logoutUrl("/logout")
+                .logoutSuccessUrl("/auth/login");
     }
 
     // Настраиваем аутентификацию
